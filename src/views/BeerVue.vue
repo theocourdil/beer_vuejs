@@ -3,7 +3,7 @@
     <div class="about">
       <h1>Voici nos bières</h1>
     </div>
-    <input placeholder="Rechercher par nom" v-model="searchQuery">
+    <input placeholder="Rechercher par nom" v-model="searchQuery" v-on:keyup="filteredBeers()">
     <b-pagination
       v-model="currentPage"
       :total-rows="rows"
@@ -11,13 +11,13 @@
       aria-controls="my-table"
     ></b-pagination>
     <p class="mt-3">Page: {{ currentPage }}</p>
-    <div v-for="r of resultQuery" :key="r" :per-page="perPage" :current-page="currentPage">
+    <div v-for="beer of beers" :key="beer.name" :per-page="perPage" :current-page="currentPage">
       <div class="container-fluid">
         <div class="card shadow-sm mb-3">
-          <div class="p-3 fw-bold"> Nom: {{r.name}}</div>
-          <td>Description: {{r.description}}</td>
-          <td>Température de fermentation: {{r.method.fermentation.temp.value}} °C</td>
-          <img :src=r.image_url width="50px">
+          <div class="p-3 fw-bold">{{beer.name}}</div>
+          <td>{{beer.description}}</td>
+          <td><b>Température de fermentation :</b> {{beer.method.fermentation.temp.value}} °C</td>
+          <img :src=beer.image_url width="50px">
         </div>
       </div>
     </div>
@@ -39,24 +39,22 @@ export default {
     }
   },
   mounted () {
-    Vue.axios.get('https://api.punkapi.com/v2/beers')
+    Vue.axios.get('https://api.punkapi.com/v2/beers?per_page=20')
     .then((resp)=>{
       this.beers=resp.data
-      console.warn(resp.data)
+      console.log(resp.data);
     })
   },
   computed: {
-    resultQuery() {
-      if (this.searchQuery) {
-        return this.beers.filter(item => {
-          return this.searchQuery
-            .toLowerCase()
-            .split(" ")
-            .every(v => item.name.toLowerCase().includes(v));
-        });
-      } else {
-        return this.beers;
+    filteredBeers() {
+      let match = '';
+      if (this.searchQuery != null) {
+        match = `?beer_name=${this.searchQuery}`
       }
+      Vue.axios.get('https://api.punkapi.com/v2/beers' + match)
+      .then((resp)=>{
+        this.beers = resp.data
+      })
     },
     rows() {
         return this.beers.length
