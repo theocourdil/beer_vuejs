@@ -3,10 +3,10 @@
     <div class="about">
       <h1>Voici nos bières</h1>
     </div>
-    <input placeholder="Rechercher par nom" v-model="searchQuery" v-on:keyup="filteredBeers()">
+    <input placeholder="Rechercher par nom" v-model="searchQuery">
     <b-pagination
       v-model="currentPage"
-      :total-rows="rows"
+      :total-rows="nbBeers"
       :per-page="perPage"
       aria-controls="my-table"
     ></b-pagination>
@@ -32,33 +32,46 @@ Vue.use(VueAxios, axios)
 export default {
   data () {
     return {
-      perPage: 3,
+      perPage: 10,
       currentPage: 1,
-      searchQuery: null,
+      searchQuery: '',
       beers: [],
+      nbBeers: 325
     }
   },
   mounted () {
-    Vue.axios.get('https://api.punkapi.com/v2/beers?per_page=20')
+    Vue.axios.get('https://api.punkapi.com/v2/beers?per_page=' + this.perPage)
     .then((resp)=>{
       this.beers=resp.data
       console.log(resp.data);
     })
   },
   computed: {
-    filteredBeers() {
-      let match = '';
-      if (this.searchQuery != null) {
-        match = `?beer_name=${this.searchQuery}`
-      }
-      Vue.axios.get('https://api.punkapi.com/v2/beers' + match)
+
+  },
+  watch: {
+    currentPage() {
+      Vue.axios.get('https://api.punkapi.com/v2/beers?per_page=' + this.perPage + '&page=' + this.currentPage)
       .then((resp)=>{
         this.beers = resp.data
       })
     },
-    rows() {
-        return this.beers.length
+    searchQuery() {
+      console.log(this.searchQuery);
+      let match = '';
+      if (this.searchQuery != '') {
+        match = `&beer_name=${this.searchQuery}`
       }
-  },
+      Vue.axios.get('https://api.punkapi.com/v2/beers?per_page=' + this.perPage + match)
+      .then((resp)=>{
+        this.beers = resp.data
+        this.currentPage = 1;
+        this.nbBeers = this.beers.length;
+        if (this.searchQuery == '') {
+          this.nbBeers = 325;
+        }
+      })
+    }
+  }
 }
 </script>
