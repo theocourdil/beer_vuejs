@@ -4,13 +4,9 @@
       <h1>Voici nos bières</h1>
     </div>
     <input placeholder="Rechercher par nom" v-model="searchQuery">
-    <b-pagination
-      v-model="currentPage"
-      :total-rows="nbBeers"
-      :per-page="perPage"
-      aria-controls="my-table"
-    ></b-pagination>
-    EBC entre ... et ...
+    <div class="my-3">
+      EBC entre ... et ...
+    </div>
     <div class='range-slider'>
       <input type="range" min=1 max=140 step="1" v-model="minEBC">
       <input type="number" min=1 max=140 step="1" v-model="minEBC">
@@ -19,6 +15,12 @@
   </div>
     <p class="mt-3">Page: {{ currentPage }}</p>
     <ListBeers :beers="beers" />
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="nbBeers"
+      :per-page="perPage"
+      aria-controls="my-table"
+    ></b-pagination>
   </div>
 </template>
 
