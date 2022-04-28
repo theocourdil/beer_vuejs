@@ -18,17 +18,7 @@
       <input type="number" min=1 max=140 step="1" v-model="maxEBC">
   </div>
     <p class="mt-3">Page: {{ currentPage }}</p>
-    <div v-for="beer of beers" :key="beer.name" :per-page="perPage" :current-page="currentPage">
-      <div class="container-fluid">
-        <div class="card shadow-sm mb-3">
-          <div class="p-3 fw-bold">{{beer.name}}</div>
-          <td>{{beer.description}}</td>
-          <td><b>Température de fermentation :</b> {{beer.method.fermentation.temp.value}} °C</td>
-          <td><b>EBC :</b> {{beer.ebc}}</td>
-          <img :src=beer.image_url width="50px">
-        </div>
-      </div>
-    </div>
+    <ListBeers :beers="beers" />
   </div>
 </template>
 
@@ -36,8 +26,12 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import ListBeers from '@/components/ListBeers';
 Vue.use(VueAxios, axios)
 export default {
+  components: {
+    ListBeers
+  },
   data () {
     return {
       perPage: 10,
