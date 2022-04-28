@@ -4,7 +4,9 @@
         Tagline : {{ beer.tagline }}
         First brewed : {{ beer.first_brewed }}
         Description : {{ beer.description }}
-        <img :src=beer.image_url class="image">
+        <div>
+          <img :src=beer.image_url class="image">
+        </div>
         ABV : {{ beer.abv }}
         IBU : {{ beer.ibu }}
         Target FG : {{ beer.target_fg }}
@@ -30,6 +32,7 @@ export default {
 }
 
 .image {
-  max-width: 300px;
+  height: 300px;
+  margin: 20px auto;
 }
 </style>

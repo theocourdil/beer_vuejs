@@ -4,7 +4,7 @@
             <router-link :to="{ name: 'oneBeer', params: { id: beer.id }}">
                 <div class="container-fluid">
                     <div class="card shadow-sm mb-3">
-                    <div class="p-3 fw-bold">{{beer.name}}</div>
+                    <div class="p-3 fw-bold name">{{beer.name}}</div>
                     <td>{{beer.description}}</td>
                     <td><b>Température de fermentation :</b> {{beer.method.fermentation.temp.value}} °C</td>
                     <td><b>EBC :</b> {{beer.ebc}}</td>
@@ -32,5 +32,13 @@ a .card:hover {
     background: #2c3e50;
     color: #ddd;
     transition: all .3s ease-in-out;
+}
+
+img {
+    margin: 20px auto;
+}
+
+.name {
+    font-size: 28px;
 }
 </style>
